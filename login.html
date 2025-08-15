@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Live Math Mock Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="back-link">← Home</a>
+    <h1>Login</h1>
+  </header>
+
+  <main class="container">
+    <div class="tabs">
+      <button class="tab-btn" data-tab="student">Student</button>
+      <button class="tab-btn" data-tab="admin">Admin</button>
+    </div>
+
+    <section id="student" class="tab active">
+      <form id="studentForm" class="form">
+        <div class="grid-2">
+          <label>
+            Name
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            Class/Group
+            <input type="text" name="class" placeholder="e.g., XII-B" required />
+          </label>
+          <label>
+            Roll No
+            <input type="text" name="roll" required />
+          </label>
+          <label>
+            Select Test
+            <select name="testId" id="testSelect" required></select>
+          </label>
+        </div>
+        <button type="submit" class="btn primary">Start Test</button>
+      </form>
+    </section>
+
+    <section id="admin" class="tab">
+      <form id="adminForm" class="form">
+        <label>
+          Admin Password
+          <input type="password" name="password" required />
+        </label>
+        <button type="submit" class="btn primary">Login</button>
+        <p class="hint">Default password: admin123 (change in admin panel)</p>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Simple tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+    // Activate tab from hash
+    if (location.hash === '#admin') {
+      document.querySelector('[data-tab="admin"]').click();
+    }
+
+    const LS_TESTS = 'lmmTests';
+    const LS_USER = 'lmmUser';
+
+    function getTests() {
+      try { return JSON.parse(localStorage.getItem(LS_TESTS)) || []; } catch { return []; }
+    }
+    function saveTests(t) { localStorage.setItem(LS_TESTS, JSON.stringify(t)); }
+    function setUser(u) { localStorage.setItem(LS_USER, JSON.stringify(u)); }
+
+    // Seed a sample test on first run
+    (function seed() {
+      const tests = getTests();
+      if (tests.length) return;
+      const sample = {
+        id: 'TST-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
+        title: 'Higher Maths Mock Test 1',
+        duration: 45, // minutes
+        negative: { mcq: -1, integer: 0 },
+        createdAt: new Date().toISOString(),
+        questions: [
+          {
+            id: 'Q1',
+            type: 'mcq',
+            text: 'Evaluate $\\int_0^1 (3x^2 - 2x + 1)\\,dx$.',
+            options: ['1', '2', '\\tfrac{3}{2}', '0'],
+            answer: 0, // index of correct option
+            marks: 4,
+            negative: -1,
+            explanation: '$x^3 - x^2 + x\\,\\big|_0^1 = 1-1+1 = 1$.'
+          },
+          {
+            id: 'Q2',
+            type: 'integer',
+            text: 'Compute $\\det\\begin{pmatrix}2&-1\\\\3&4\\end{pmatrix}$.',
+            answer: 11,
+            marks: 4,
+            negative: 0,
+            explanation: '$2\\cdot4 - (-1)\\cdot3 = 11$.'
+          },
+          {
+            id: 'Q3',
+            type: 'mcq',
+            text: 'Find $\\displaystyle \\lim_{x\\to 0}\\frac{\\sin x}{x}$.',
+            options: ['0','1','\\infty','\\text{Does not exist}'],
+            answer: 1,
+            marks: 4,
+            negative: -1,
+            explanation: 'Standard limit: $1$.'
+          },
+          {
+            id: 'Q4',
+            type: 'mcq',
+            text: 'If $y=x^x$, then $\\dfrac{dy}{dx}\\bigg|_{x=1}$ equals:',
+            options: ['0','1','e','\\ln 2'],
+            answer: 1,
+            marks: 4,
+            negative: -1,
+            explanation: '$\\dfrac{dy}{dx}=x^x(\\ln x + 1)$, at $x=1$: $1\\cdot(0+1)=1$.'
+          },
+          {
+            id: 'Q5',
+            type: 'integer',
+            text: 'If $z=(1+i)^{10}$, compute $|z|$.',
+            answer: 32,
+            marks: 4,
+            negative: 0,
+            explanation: '$|1+i|=\\sqrt{2}$ so $|(1+i)^{10}|=2^{5}=32$.'
+          }
+        ]
+      };
+      saveTests([sample]);
+    })();
+
+    // Populate tests in dropdown
+    const testSelect = document.getElementById('testSelect');
+    function refreshTestList() {
+      const tests = getTests();
+      testSelect.innerHTML = '';
+      if (!tests.length) {
+        const opt = document.createElement('option');
+        opt.textContent = 'No tests available';
+        opt.value = '';
+        testSelect.appendChild(opt);
+        testSelect.disabled = true;
+      } else {
+        testSelect.disabled = false;
+        tests.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t.id;
+          opt.textContent = `${t.title} (${t.duration} min)`;
+          testSelect.appendChild(opt);
+        });
+      }
+    }
+    refreshTestList();
+
+    // Student login
+    document.getElementById('studentForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const form = new FormData(e.currentTarget);
+      const name = form.get('name').trim();
+      const klass = form.get('class').trim();
+      const roll = form.get('roll').trim();
+      const testId = form.get('testId');
+      if (!testId) return alert('Please select a test.');
+      setUser({ role: 'student', name, class: klass, roll, loginAt: Date.now() });
+      location.href = `test.html?testId=${encodeURIComponent(testId)}`;
+    });
+
+    // Admin login
+    document.getElementById('adminForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const pwd = new FormData(e.currentTarget).get('password');
+      const adminPwd = localStorage.getItem('lmmAdminPwd') || 'admin123';
+      if (pwd === adminPwd) {
+        setUser({ role: 'admin', name: 'Admin', loginAt: Date.now() });
+        location.href = 'admin.html';
+      } else {
+        alert('Incorrect password.');
+      }
+    });
+  </script>
+</body>
+</html>
