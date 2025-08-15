@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test | Live Math Mock Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/test.css" />
+  <script src="scripts/mathjax-config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="back-link">← Home</a>
+    <h1 id="testTitle">Test</h1>
+    <div class="meta">
+      <span id="studentName"></span>
+      <span class="timer" id="timer">00:00</span>
+    </div>
+  </header>
+
+  <main class="container test-layout">
+    <aside class="panel">
+      <h3>Questions</h3>
+      <div id="navGrid" class="nav-grid"></div>
+      <div class="legend">
+        <span class="dot not-visited"></span>Not visited
+        <span class="dot visited"></span>Visited
+        <span class="dot answered"></span>Answered
+        <span class="dot review"></span>Mark for review
+      </div>
+      <button id="submitBtn" class="btn danger">Submit Test</button>
+    </aside>
+
+    <section class="question-area">
+      <div class="q-head">
+        <h3 id="qHeader">Question</h3>
+      </div>
+      <div id="qText" class="q-text"></div>
+
+      <div id="mcqOptions" class="options"></div>
+      <div id="intInput" class="int-input" style="display:none;">
+        <label>Answer:
+          <input type="number" id="intAnswer" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="clearBtn" class="btn">Clear</button>
+        <button id="markBtn" class="btn">Mark for Review</button>
+        <div class="spacer"></div>
+        <button id="prevBtn" class="btn">← Prev</button>
+        <button id="nextBtn" class="btn">Next →</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="scripts/test.js"></script>
+</body>
+</html>
