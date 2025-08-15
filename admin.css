@@ -1,0 +1,7 @@
+.q-list { display:flex; flex-direction:column; gap:.75rem; padding-left: 1rem; }
+.q-item { background:#0b1220; border:1px solid #374151; border-radius:8px; padding:.6rem .8rem; }
+.q-top { display:flex; justify-content:space-between; align-items:center; }
+.q-actions button { margin-left:.25rem; }
+.lb { margin-top:.5rem; }
+.lb-row { display:grid; grid-template-columns: 2rem 1fr 6rem 6rem 5rem 5rem; gap:.5rem; padding:.4rem .5rem; border-bottom:1px solid #334155; }
+.lb-head { font-weight:700; background:#0b1220; }
