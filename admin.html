@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin | Live Math Mock Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/admin.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="back-link">← Home</a>
+    <h1>Admin Panel</h1>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Tests</h2>
+      <div class="toolbar">
+        <select id="testList"></select>
+        <button id="newTestBtn" class="btn">+ New Test</button>
+        <button id="deleteTestBtn" class="btn danger">Delete Test</button>
+        <button id="exportBtn" class="btn">Export JSON</button>
+        <label class="file-btn">
+          Import JSON
+          <input type="file" id="importFile" accept="application/json" hidden />
+        </label>
+      </div>
+      <div id="shareLinkBox" class="share">
+        <span>Share link:</span>
+        <input id="shareLink" type="text" readonly />
+        <button id="copyLinkBtn" class="btn">Copy</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Test Settings</h2>
+      <div class="grid-3">
+        <label>
+          Title
+          <input type="text" id="testTitle" />
+        </label>
+        <label>
+          Duration (min)
+          <input type="number" id="testDuration" min="1" value="60" />
+        </label>
+        <label>
+          MCQ Negative
+          <input type="number" id="negMcq" step="0.25" value="-1" />
+        </label>
+        <label>
+          Integer Negative
+          <input type="number" id="negInt" step="0.25" value="0" />
+        </label>
+        <label>
+          Admin Password
+          <input type="password" id="adminPwd" placeholder="Change admin password" />
+        </label>
+      </div>
+      <button id="saveTestBtn" class="btn primary">Save Test</button>
+    </section>
+
+    <section class="card">
+      <h2>Add Question</h2>
+      <div class="grid-2">
+        <label>
+          Type
+          <select id="qType">
+            <option value="mcq">MCQ (single correct)</option>
+            <option value="integer">Integer answer</option>
+          </select>
+        </label>
+        <label>
+          Marks
+          <input type="number" id="qMarks" value="4" />
+        </label>
+      </div>
+      <label>
+        Question (supports LaTeX)
+        <textarea id="qText" rows="3"></textarea>
+      </label>
+      <div id="mcqBox" class="grid-2">
+        <label>Option A<input type="text" id="opt0"></label>
+        <label>Option B<input type="text" id="opt1"></label>
+        <label>Option C<input type="text" id="opt2"></label>
+        <label>Option D<input type="text" id="opt3"></label>
+        <label>Correct Option (0-3)<input type="number" id="qAnswerIdx" min="0" max="3" value="0"></label>
+      </div>
+      <div id="intBox" class="grid-2" style="display:none">
+        <label>Correct Integer Answer<input type="number" id="qAnswerInt" /></label>
+      </div>
+      <label>
+        Explanation (optional)
+        <textarea id="qExplanation" rows="2"></textarea>
+      </label>
+      <button id="addQuestionBtn" class="btn">Add Question</button>
+    </section>
+
+    <section class="card">
+      <h2>Questions</h2>
+      <ol id="qList" class="q-list"></ol>
+    </section>
+
+    <section class="card">
+      <h2>Results Overview</h2>
+      <button id="refreshResultsBtn" class="btn">Refresh</button>
+      <div id="resultsSummary"></div>
+      <div id="leaderboard"></div>
+    </section>
+  </main>
+
+  <script src="scripts/admin.js"></script>
+</body>
+</html>
